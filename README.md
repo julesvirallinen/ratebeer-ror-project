@@ -1,0 +1,1 @@
+# ratebeer-ror-project
