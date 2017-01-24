@@ -15,3 +15,9 @@
 /log/*
 !/log/.keep
 /tmp
+
+.byebug_history
+.rake_tasks~
+[0m,
+[0m]
+c
