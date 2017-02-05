@@ -23,6 +23,13 @@
   <% end %>
 </ul>
 
+<p>
+  <strong>Memberships:</strong>
+  <% @user.memberships.each do |membership| %>
+      <%= membership.beer_club %>
+  <% end %>
+</p>
+
 <% if @user == current_user %>
     <%= link_to 'Edit', edit_user_path(@user) %>
     <%= link_to 'Destroy', @user, method: :delete, data: {confirm: 'Are you sure?'} %>
