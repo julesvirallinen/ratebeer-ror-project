@@ -1,6 +1,8 @@
 class Rating < ActiveRecord::Base
   belongs_to :beer
-    @ratings = Rating.all
+  belongs_to :user   # rating kuuluu myös käyttäjään
+
+  # @ratings = Rating.all
 
     def to_s 
         "#{beer.name}: #{score}"
