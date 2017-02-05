@@ -4,12 +4,19 @@ class Brewery < ActiveRecord::Base
 
   validates :name, length: {minimum: 1}
   validates :year, numericality: {greater_than_or_equal_to: 1042,
-                                   less_than_or_equal_to: 2017,
                                    only_integer: true}
+  validate :year_is_not_in_future
 
 
 
   include RatingAverage
+
+  def year_is_not_in_future
+    if year.present? && year > Date.today.year
+      errors.add(:year, "Can't be in the future")
+    end
+  end
+
 
   def print_report
     puts name
