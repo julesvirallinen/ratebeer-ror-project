@@ -1,0 +1,10 @@
+<p id="notice"><%= notice %></p>
+
+
+  <h1><%= @user.username %></h1>
+
+<p>Has made <%= @user.ratings.count %> ratings, with an average of <%= @user.ratings.average %></p>
+
+
+<%= link_to 'Edit', edit_user_path(@user) %> |
+<%= link_to 'Back', users_path %>
