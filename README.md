@@ -5,4 +5,5 @@
 
 [![Build Status](https://travis-ci.org/julkku/ratebeer-ror-project.png)](https://travis-ci.org/julkku/ratebeer-ror-project)
 
+[![Code Climate](https://codeclimate.com/github/julkku/ratebeer-ror-project.png)](https://codeclimate.com/github/julkku/ratebeer-ror-project)
 
