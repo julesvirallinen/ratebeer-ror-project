@@ -4,9 +4,8 @@ class Brewery < ActiveRecord::Base
 
   validates :name, length: {minimum: 1}
   validates :year, numericality: {greater_than_or_equal_to: 1042,
-                                   only_integer: true}
+                                  only_integer: true}
   validate :year_is_not_in_future
-
 
 
   include RatingAverage
