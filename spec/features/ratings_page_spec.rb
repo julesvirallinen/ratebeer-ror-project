@@ -61,7 +61,6 @@ describe "Ratings" do
       within("li") do
         click_on("delete")
       end
-
       expect(page).not_to have_content 'iso 3: 10'
       expect(Rating.count).to eq(0)
     end

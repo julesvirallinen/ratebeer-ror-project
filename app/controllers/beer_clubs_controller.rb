@@ -11,6 +11,14 @@ class BeerClubsController < ApplicationController
   # GET /beer_clubs/1
   # GET /beer_clubs/1.json
   def show
+    @is_a_member = @beer_club.memberships.map { |m| m.user.id }.include? session[:user_id]
+    if @is_a_member
+        @membership = Membership.find_by(user_id: current_user.id, beer_club_id: @beer_club.id)
+    else
+      @membership = Membership.new
+      @membership.beer_club = @beer_club
+
+    end
   end
 
   # GET /beer_clubs/new

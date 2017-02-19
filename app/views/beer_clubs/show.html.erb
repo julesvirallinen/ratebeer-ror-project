@@ -1,13 +1,11 @@
 <p id="notice"><%= notice %></p>
 
-<p>
-  <strong>Name:</strong>
+<h1>
   <%= @beer_club.name %>
-</p>
+</h1>
 
 <p>
-  <strong>Founded:</strong>
-  <%= @beer_club.founded %>
+  Founded in <%= @beer_club.founded %>
 </p>
 
 <p>
@@ -18,8 +16,22 @@
 <p>
   <strong>Members:</strong>
   <% @beer_club.memberships.each do |membership| %>
-      <li><%= membership.user.username %></li>
+    <li><%= membership.user.username %></li>
 <% end %>
+</p>
+<p>
+  <% if current_user && !@is_a_member %>
+      <%= form_for(@membership) do |f| %>
+          <%= f.hidden_field :beer_club_id %>
+          <%= f.submit value: "join the club" %>
+      <% end %>
+  <% elsif current_user && @is_a_member %>
+      <%= form_for(@membership, method: "delete") do |f| %>
+          <%= f.hidden_field :beer_club_id %>
+          <%= f.submit value: "end the membership" %>
+      <% end %>
+
+  <% end %>
 </p>
 
 <%= link_to 'Edit', edit_beer_club_path(@beer_club) %> |
