@@ -6,12 +6,12 @@
   <% if @user.ratings.empty? %>
       <%= @user.username %> hasn't rated anything yet.
   <% else %>
-      Has <%= @user.ratings.count %> <%= "rating".pluralize(@user.ratings.count) %>, average <%= @user.average_rating %>. Their favourite style is <%= @user.favorite_style %>
+      Has <%= @user.ratings.count %> <%= "rating".pluralize(@user.ratings.count) %>, average <%= @user.average_rating %>. Their favourite style is <%= @user.favorite_style.name if @user.favorite_style %>
   <% end %>
 </p>
-<p> Favorite beer: <%= @user.favorite_beer %> </p>
-<p> Favorite brewery: <%= @user.favorite_brewery.name %> </p>
-<p> Favorite style: <%= @user.favorite_style %> </p>
+<p> Favorite beer: <%= @user.favorite_beer if @user.favorite_beer %> </p>
+<p> Favorite brewery: <%= @user.favorite_brewery.name if @user.favorite_brewery %> </p>
+<p> Favorite style: <%= @user.favorite_style.name if @user.favorite_style %> </p>
 
 
 <h2>Ratings</h2>
