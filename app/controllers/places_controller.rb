@@ -8,6 +8,8 @@ class PlacesController < ApplicationController
   def search
     session[:lastsearch] = params[:city]
     @places = BeermappingApi.places_in(params[:city])
+    @weather = BeermappingApi.weather_in(params[:city])
+    # binding.py
     if @places.empty?
       redirect_to places_path, notice: "No locations in #{params[:city]}"
     else
@@ -16,7 +18,7 @@ class PlacesController < ApplicationController
   end
 
   def show
-    @place = BeermappingApi.places_in(session[:lastsearch]).select {|place| place.id == params[:id]}.first
+    @place = BeermappingApi.places_in(session[:lastsearch]).select { |place| place.id == params[:id] }.first
     @map = "https://www.google.com/maps/embed/v1/place?key=#{ENV['MAPAPI']}&q=#{ERB::Util.url_encode(@place.name)},#{ERB::Util.url_encode(@place.city)}"
   end
 end

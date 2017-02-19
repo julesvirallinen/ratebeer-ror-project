@@ -5,7 +5,18 @@
     <%= submit_tag "Search" %>
 <% end %>
 
+<% if @weather %>
+    <p>
+    <strong>The current beer weather in <%= @weather["location"]["name"] %>:</strong>
+    <p><img src="http://<%= @weather["current"]["condition"]["icon"] %>"/></p>
+    <p><%= @weather["current"]["temp_c"] %> Celsius, feels like <%= @weather["current"]["feelslike_c"] %></p>
+    </p>
+<% end %>
+
 <% if @places %>
+    <strong>Places to get beer:</strong>
+
+
     <table>
       <thead>
       <% Place.rendered_fields.each do |f| %>
