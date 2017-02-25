@@ -8,8 +8,7 @@ class PlacesController < ApplicationController
   def search
     session[:lastsearch] = params[:city]
     @places = BeermappingApi.places_in(params[:city])
-    @weather = BeermappingApi.weather_in(params[:city])
-    # binding.py
+    @weather = WeatherService.weather_for(params[:city])
     if @places.empty?
       redirect_to places_path, notice: "No locations in #{params[:city]}"
     else

@@ -1,5 +1,6 @@
 class UsersController < ApplicationController
   before_action :set_user, only: [:show, :edit, :update, :destroy]
+  before_filter :admin_only, only: [:freeze]
 
   # GET /users
   # GET /users.json
@@ -64,6 +65,15 @@ class UsersController < ApplicationController
       format.html { redirect_to users_url, notice: 'User was successfully destroyed.' }
       format.json { head :no_content }
     end
+  end
+
+  def freeze
+    user = User.find(params[:id])
+    user.update_attribute :blocked, (not user.blocked)
+
+    new_status = user.blocked? ? "frozen" : "unfrozen"
+
+    redirect_to user_path, notice:"account #{new_status}"
   end
 
   private

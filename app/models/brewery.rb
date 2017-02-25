@@ -7,8 +7,16 @@ class Brewery < ActiveRecord::Base
                                   only_integer: true}
   validate :year_is_not_in_future
 
+  scope :active, -> { where active:true }
+  scope :retired, -> { where active:[nil,false] }
+
 
   include RatingAverage
+
+  def self.top(n)
+    sorted_by_rating_in_desc_order = Brewery.all.sort_by { |b| -(b.average_rating||0) }
+    sorted_by_rating_in_desc_order.take(3)
+  end
 
   def year_is_not_in_future
     if year.present? && year > Date.today.year

@@ -1,7 +1,10 @@
-<p id="notice"><%= notice %></p>
-
-
 <h1><%= @user.username %></h1>
+<% if  @user.admin?  %>
+    <span class="label label-info">admin</span>
+<% end %>
+<% if  @user.blocked?  %>
+    <span class="label label-danger">Account frozen</span>
+<% end %>
 <p>
   <% if @user.ratings.empty? %>
       <%= @user.username %> hasn't rated anything yet.
@@ -34,7 +37,9 @@
 </p>
 
 <% if @user == current_user %>
-    <%= link_to 'Edit', edit_user_path(@user) %>
-    <%= link_to 'Destroy', @user, method: :delete, data: {confirm: 'Are you sure?'} %>
+    <%= edit_and_destroy_buttons(@user) %>
 <% end %>
+<%= link_to 'Freeze account', freeze_user_path(@user), method: :post, class: 'btn btn-danger btn-sm' if current_user.admin? and not @user.blocked? %>
+<%= link_to 'Unfreeze account', freeze_user_path(@user), method: :post, class: 'btn btn-success btn-sm' if current_user.admin? and @user.blocked? %>
+
 <%= link_to 'Back', users_path %>

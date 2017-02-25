@@ -10,6 +10,14 @@ class ApplicationController < ActionController::Base
   end
 
   def ensure_that_signed_in
-    redirect_to signin_path, notice:'you should be signed in' if current_user.nil?
+    redirect_to signin_path, notice: 'you should be signed in' if current_user.nil?
+  end
+
+  def admin_only
+    if session[:user_id].nil?
+      redirect_to :root, :alert => "Access denied."
+    elsif not User.find(session[:user_id]).admin?
+      redirect_to :root, :alert => "Access denied."
+    end
   end
 end
