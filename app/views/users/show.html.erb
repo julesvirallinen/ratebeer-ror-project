@@ -31,10 +31,17 @@
 
 <p>
   <strong>Memberships:</strong>
-  <% @user.memberships.each do |membership| %>
+  <% @user.confirmed_memberships.each do |membership| %>
       <%= membership.beer_club.name %>
   <% end %>
 </p>
+<p>
+  <strong>Memberships:</strong>
+  <% @user.unconfirmed_memberships.each do |membership| %>
+      <%= membership.beer_club.name %>
+  <% end %>
+</p>
+
 
 <% if @user == current_user %>
     <%= edit_and_destroy_buttons(@user) %>

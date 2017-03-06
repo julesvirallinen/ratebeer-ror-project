@@ -1,14 +1,25 @@
 class BeersController < ApplicationController
   before_action :set_beer, only: [:show, :edit, :update, :destroy]
   before_action :set_breweries_and_styles_for_template, only: [:new, :edit, :create]
-  before_action :ensure_that_signed_in, except: [:index, :show]
-  before_filter :admin_only, only: [ :destroy]
+  before_action :ensure_that_signed_in, except: [:index, :show, :list]
+  before_filter :admin_only, only: [:destroy]
+  before_action :expire_cache, only: [:create, :update, :destroy]
+  before_action :skip_if_cached, only: [:index]
 
 
   # GET /beers
   # GET /beers.json
   def index
-    @beers = Beer.all
+    @beers = Beer.includes(:brewery, :style).all
+
+    @beers = case @order
+               when 'name' then
+                 @beers.sort_by { |b| b.name }
+               when 'brewery' then
+                 @beers.sort_by { |b| b.brewery.name }
+               when 'style' then
+                 @beers.sort_by { |b| b.style.name }
+             end
   end
 
   # GET /beers/1
@@ -17,6 +28,7 @@ class BeersController < ApplicationController
     @rating = Rating.new
     @rating.beer = @beer
   end
+
   # GET /beers/new
   def new
     @beer = Beer.new
@@ -26,11 +38,14 @@ class BeersController < ApplicationController
   def edit
   end
 
+  def list
+  end
+
   # POST /beers
   # POST /beers.json
   def create
     @beer = Beer.new(beer_params)
-    
+
 
     respond_to do |format|
       if @beer.save
@@ -42,7 +57,7 @@ class BeersController < ApplicationController
         format.json { render json: @beer.errors, status: :unprocessable_entity }
       end
     end
-    
+
   end
 
   # PATCH/PUT /beers/1
@@ -70,19 +85,28 @@ class BeersController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_beer
-      @beer = Beer.find(params[:id])
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_beer
+    @beer = Beer.find(params[:id])
+  end
 
   def set_breweries_and_styles_for_template
     @breweries = Brewery.all
     @styles = Style.all
   end
 
+  def expire_cache
+    ["beerlist-name", "beerlist-brewery", "beerlist-style"].each { |f| expire_fragment(f) }
+  end
+
+  def skip_if_cached
+    @order = params[:order] || 'name'
+    return render :index if fragment_exist?("beerlist-#{@order}")
+  end
+
 
   # Never trust parameters from the scary internet, only allow the white list through.
-    def beer_params
-      params.require(:beer).permit(:name, :style, :brewery_id, :style_id)
-    end
+  def beer_params
+    params.require(:beer).permit(:name, :style, :brewery_id, :style_id)
+  end
 end

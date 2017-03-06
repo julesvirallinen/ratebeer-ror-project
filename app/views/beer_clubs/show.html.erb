@@ -15,10 +15,23 @@
 
 <p>
   <strong>Members:</strong>
-  <% @beer_club.memberships.each do |membership| %>
+  <% @beer_club.confirmed_memberships.each do |membership| %>
     <li><%= membership.user.username %></li>
 <% end %>
 </p>
+  <% if current_user && @is_a_member %>
+  <strong>Unconfirmed members:</strong>
+  <% @beer_club.unconfirmed_memberships.each do |membership| %>
+    <li><%= membership.user.username %>
+          <%= form_for(membership) do |f| %>
+              <%= f.hidden_field :beer_club_id %>
+              <%= f.hidden_field :user_id, :value => membership.user.id %>
+              <%= f.hidden_field :confirmed, :value => true %>
+              <%= f.submit value: "confirm membership", class:'btn btn-primary btn-sm'  %></li>
+          <% end %>
+      <% end %>
+  <% end %>
+
 <p>
   <% if current_user && !@is_a_member %>
       <%= form_for(@membership) do |f| %>

@@ -39,6 +39,8 @@ gem 'httparty'
 
 gem 'bootstrap-sass'
 
+gem 'jquery-turbolinks'
+
 
 # Use Unicorn as the app server
 # gem 'unicorn'
@@ -52,8 +54,6 @@ group :test do
   gem 'capybara'
   gem 'launchy'
   gem 'webmock'
-
-
 
 end
 group :development, :test do
@@ -70,6 +70,7 @@ group :development do
   # Access an IRB console on exception pages or by using <%= console %> in views
   gem 'web-console', '~> 2.0'
   gem 'rails_layout'
+  gem 'rack-mini-profiler'
 
 
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring

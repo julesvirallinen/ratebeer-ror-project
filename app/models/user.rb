@@ -1,7 +1,8 @@
 class User < ActiveRecord::Base
   has_many :beers, through: :ratings
   has_many :ratings, dependent: :destroy
-  has_many :memberships, dependent: :destroy
+  has_many :confirmed_memberships, -> {where confirmed: true}, class_name: "Membership", dependent: :destroy
+  has_many :unconfirmed_memberships, -> {where confirmed: [nil,false]}, class_name: "Membership", dependent: :destroy
 
 
   include RatingAverage
@@ -37,6 +38,11 @@ class User < ActiveRecord::Base
 
     rated = ratings.map{ |r| r.beer.send(category) }.uniq
     rated.sort_by { |item| -rating_of(category, item) }.first
+  end
+
+  def rating_of(category, item)
+    ratings_of = ratings.select{ |r| r.beer.send(category)==item }
+    ratings_of.map(&:score).inject(&:+) / ratings_of.count.to_f
   end
 
 end
